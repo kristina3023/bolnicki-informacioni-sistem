@@ -1,5 +1,4 @@
 
-kristina@kristinaubuntu:~$ cat /var/www/bolnica/karton.php
 <?php
 $conn = new mysqli('localhost', 'bolnica_user', 'Praksa.123', 'bolnica');
 if ($conn->connect_error) { die("Greška: " . $conn->connect_error); }
