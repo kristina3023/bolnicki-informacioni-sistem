@@ -1,5 +1,4 @@
 
-kristina@kristinaubuntu:~$ cat /var/www/bolnica/dodaj.php
 <?php
 $conn = new mysqli('localhost', 'bolnica_user', 'Praksa.123', 'bolnica');
 $poruka = '';
