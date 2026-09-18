@@ -1,4 +1,4 @@
-kristina@kristinaubuntu:~$ cat /var/www/bolnica/index.php
+
 <?php
 $conn = new mysqli('localhost', 'bolnica_user', 'Praksa.123', 'bolnica');
 if ($conn->connect_error) { die("Greška pri povezivanju: " . $conn->connect_error); }
