@@ -1,0 +1,262 @@
+-- MySQL dump 10.13  Distrib 8.0.42, for Linux (x86_64)
+--
+-- Host: localhost    Database: bolnica
+-- ------------------------------------------------------
+-- Server version       8.0.42-0ubuntu0.20.04.1
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `doktor`
+--
+
+DROP TABLE IF EXISTS `doktor`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `doktor` (
+  `doktor_id` int NOT NULL AUTO_INCREMENT,
+  `ime` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `prezime` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `odeljenje_id` int NOT NULL,
+  `specijalizacija` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`doktor_id`),
+  KEY `FK_doktor_odeljenje` (`odeljenje_id`),
+  CONSTRAINT `FK_doktor_odeljenje` FOREIGN KEY (`odeljenje_id`) REFERENCES `odeljenje` (`odeljenje_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `doktor`
+--
+
+LOCK TABLES `doktor` WRITE;
+/*!40000 ALTER TABLE `doktor` DISABLE KEYS */;
+INSERT INTO `doktor` VALUES (1,'Dragan','Popovic',1,'Specijalista kardiologije'),(2,'Mirjana','Lazic',2,'Specijalista neurologije'),(3,'Zoran','Kovacevic',3,'Specijalista ortopedije'),(4,'Ivana','Radic',4,'Specijalista pedijatrije'),(5,'Jelena','Jovanovic',1,'Kardiolog - ehokardiografija'),(6,'Marko','Simic',1,'Lekar na specijalizaciji'),(7,'Nikola','Bogdanovic',2,'Neurolog - asistent'),(8,'Milica','Todorovic',3,'Ortoped - traumatolog');
+/*!40000 ALTER TABLE `doktor` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `lek`
+--
+
+DROP TABLE IF EXISTS `lek`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `lek` (
+  `lek_id` int NOT NULL AUTO_INCREMENT,
+  `naziv` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `cena_po_jedinici` decimal(10,2) NOT NULL,
+  PRIMARY KEY (`lek_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `lek`
+--
+
+LOCK TABLES `lek` WRITE;
+/*!40000 ALTER TABLE `lek` DISABLE KEYS */;
+INSERT INTO `lek` VALUES (1,'Paracetamol 500mg',250.00),(2,'Panklav 625mg',650.00),(3,'Brufen 400mg',320.00),(4,'Amlodipin 5mg',280.00),(5,'Bromazepam 3mg',210.00),(6,'Panklav 1000mg',650.00),(7,'Hemomycin 500mg',520.50),(8,'Kafetin',240.00),(9,'Aspirin Protect 100mg',310.00),(10,'Controloc 20mg',480.00),(11,'Pressing 10mg',390.00),(12,'Diazepam 5mg',180.00),(13,'Monopril 20mg',720.00),(14,'Glukofaž 1000mg',410.00),(15,'Probiotic forte',580.00);
+/*!40000 ALTER TABLE `lek` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `medicinski_karton`
+--
+
+DROP TABLE IF EXISTS `medicinski_karton`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `medicinski_karton` (
+  `karton_id` int NOT NULL AUTO_INCREMENT,
+  `pacijent_id` int NOT NULL,
+  `datum_upisa` datetime DEFAULT CURRENT_TIMESTAMP,
+  `dijagnoza` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `terapija` text COLLATE utf8mb4_unicode_ci,
+  `napomena` text COLLATE utf8mb4_unicode_ci,
+  PRIMARY KEY (`karton_id`),
+  KEY `FK_karton_pacijent` (`pacijent_id`),
+  CONSTRAINT `FK_karton_pacijent` FOREIGN KEY (`pacijent_id`) REFERENCES `pacijenti` (`pacijent_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `medicinski_karton`
+--
+
+LOCK TABLES `medicinski_karton` WRITE;
+/*!40000 ALTER TABLE `medicinski_karton` DISABLE KEYS */;
+INSERT INTO `medicinski_karton` VALUES (1,1,'2026-09-14 09:28:01','Arterijska hipertenzija','Uvodjenje antihipertenzivne terapije i redovna kontrola pritiska','Izbegavati zasoljenu hranu'),(2,2,'2026-09-14 09:28:01','Tenziona glavobolja','Analgetik po potrebi, odmor i redukcija stresa','Kontrola za mesec dana'),(3,4,'2026-09-14 09:28:01','Blagi poremecaj ritma','Magnezijum 375mg dnevno, EKG kontrola za 2 nedelje','Bez tezih fizickih napora'),(4,2,'2026-09-14 10:11:00','Migrena bez aure (G43.0)','Brufen 400mg po potrebi kod napada, odmor u zamračenoj prostoriji','Izbegavati stres i jaku svetlost, javiti se po potrebi'),(5,6,'2026-09-14 10:27:20','Palpitacije i tahikardija','Holter EKG 24h, Propranolol 20mg po potrebi','Izbegavati kafu i energetska pica'),(6,8,'2026-09-14 10:27:20','Sinusna tahikardija pri naporu','Magnezijum 400mg, kontrolni ultrazvuk srca','Javiti se sa laboratorijskim nalazima'),(7,9,'2026-09-14 10:27:20','Cervikalni sindrom (bol u vratu)','Fizikalna terapija, Diklofenak gel lokalno','Izbegavati dugotrajno sedenje bez pauze');
+/*!40000 ALTER TABLE `medicinski_karton` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `odeljenje`
+--
+
+DROP TABLE IF EXISTS `odeljenje`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `odeljenje` (
+  `odeljenje_id` int NOT NULL AUTO_INCREMENT,
+  `naziv_odeljenja` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sef_doktor_id` int DEFAULT NULL,
+  PRIMARY KEY (`odeljenje_id`),
+  KEY `FK_odeljenje_sef` (`sef_doktor_id`),
+  CONSTRAINT `FK_odeljenje_sef` FOREIGN KEY (`sef_doktor_id`) REFERENCES `doktor` (`doktor_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `odeljenje`
+--
+
+LOCK TABLES `odeljenje` WRITE;
+/*!40000 ALTER TABLE `odeljenje` DISABLE KEYS */;
+INSERT INTO `odeljenje` VALUES (1,'Kardiologija',1),(2,'Neurologija',2),(3,'Ortopedija',3),(4,'Pedijatrija',4);
+/*!40000 ALTER TABLE `odeljenje` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `osiguranje`
+--
+
+DROP TABLE IF EXISTS `osiguranje`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `osiguranje` (
+  `broj_polise` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `pacijent_id` int NOT NULL,
+  `naziv_fonda` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `procenat_pokrica` decimal(5,2) DEFAULT '100.00',
+  `godisnji_max` decimal(10,2) DEFAULT NULL,
+  PRIMARY KEY (`broj_polise`),
+  UNIQUE KEY `pacijent_id` (`pacijent_id`),
+  CONSTRAINT `FK_osiguranje_pacijent` FOREIGN KEY (`pacijent_id`) REFERENCES `pacijenti` (`pacijent_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `osiguranje`
+--
+
+LOCK TABLES `osiguranje` WRITE;
+/*!40000 ALTER TABLE `osiguranje` DISABLE KEYS */;
+INSERT INTO `osiguranje` VALUES ('POL-10001',1,'RFZO',100.00,500000.00),('POL-10002',2,'Generali Osiguranje',80.00,350000.00),('POL-10003',3,'RFZO',100.00,500000.00),('POL-10004',4,'Uniqa Osiguranje',85.00,400000.00),('POL-10005',5,'RFZO',100.00,500000.00),('POL-10006',6,'Dunav Osiguranje',90.00,450000.00),('POL-10007',7,'RFZO',100.00,500000.00),('POL-10008',8,'Wiener Stadtische',80.00,300000.00),('POL-10009',9,'RFZO',100.00,500000.00),('POL-10010',10,'RFZO',100.00,500000.00);
+/*!40000 ALTER TABLE `osiguranje` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pacijenti`
+--
+
+DROP TABLE IF EXISTS `pacijenti`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `pacijenti` (
+  `pacijent_id` int NOT NULL AUTO_INCREMENT,
+  `ime` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `prezime` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `datum_rodjenja` date NOT NULL,
+  `jmbg` char(13) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `lbo` char(11) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`pacijent_id`),
+  UNIQUE KEY `jmbg` (`jmbg`),
+  UNIQUE KEY `lbo` (`lbo`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pacijenti`
+--
+
+LOCK TABLES `pacijenti` WRITE;
+/*!40000 ALTER TABLE `pacijenti` DISABLE KEYS */;
+INSERT INTO `pacijenti` VALUES (1,'Marko','Stojkovic','1985-03-12','1203985123456','10123456781'),(2,'Ana','Jovanovic','1991-04-18','1804991123456','10123456780'),(3,'Nikola','Petrovic','1978-11-03','0311978123456','10123456782'),(4,'Milan','Ilic','1982-10-15','1510982123456','10123456790'),(5,'Stefan','Stojanovic','1990-09-30','3009990123456','10123456783'),(6,'Jelena','Nikolic','1987-01-14','1401987123456','10123456784'),(7,'Luka','Dimitrijevic','1998-06-22','2206998123456','10123456785'),(8,'Marija','Pavlovic','1975-12-09','0912975123456','10123456786'),(9,'Filip','Djordjevic','2003-04-27','2704003123456','10123456787'),(10,'Tamara','Milenkovic','1995-08-16','1608995123456','10123456788'),(11,'Milovan','Saric','2002-06-05','1234567890123','10123456789');
+/*!40000 ALTER TABLE `pacijenti` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pregled`
+--
+
+DROP TABLE IF EXISTS `pregled`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `pregled` (
+  `pregled_id` int NOT NULL AUTO_INCREMENT,
+  `pacijent_id` int NOT NULL,
+  `doktor_id` int NOT NULL,
+  `datum_vreme` datetime NOT NULL,
+  `status` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT 'Zakazan',
+  PRIMARY KEY (`pregled_id`),
+  KEY `FK_pregled_pacijent` (`pacijent_id`),
+  KEY `FK_pregled_doktor` (`doktor_id`),
+  CONSTRAINT `FK_pregled_doktor` FOREIGN KEY (`doktor_id`) REFERENCES `doktor` (`doktor_id`),
+  CONSTRAINT `FK_pregled_pacijent` FOREIGN KEY (`pacijent_id`) REFERENCES `pacijenti` (`pacijent_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pregled`
+--
+
+LOCK TABLES `pregled` WRITE;
+/*!40000 ALTER TABLE `pregled` DISABLE KEYS */;
+INSERT INTO `pregled` VALUES (1,1,1,'2026-09-15 08:30:00','Zavrsen'),(2,2,2,'2026-09-16 09:00:00','Zavrsen'),(3,3,3,'2026-09-17 10:15:00','Zakazan'),(4,4,1,'2026-09-18 15:00:00','Zavrsen'),(5,5,4,'2026-09-19 11:00:00','Zakazan'),(6,6,5,'2026-09-20 09:00:00','Zakazan'),(7,7,5,'2026-09-20 10:30:00','Zakazan'),(8,8,6,'2026-09-21 11:15:00','Zakazan'),(9,9,7,'2026-09-22 08:45:00','Zakazan'),(10,10,7,'2026-09-22 12:00:00','Zakazan');
+/*!40000 ALTER TABLE `pregled` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `recept`
+--
+
+DROP TABLE IF EXISTS `recept`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `recept` (
+  `recept_id` int NOT NULL AUTO_INCREMENT,
+  `doktor_id` int NOT NULL,
+  `pacijent_id` int NOT NULL,
+  `lek_id` int NOT NULL,
+  `datum_izdavanja` datetime DEFAULT CURRENT_TIMESTAMP,
+  `kolicina` int DEFAULT '1',
+  PRIMARY KEY (`recept_id`),
+  KEY `FK_recept_doktor` (`doktor_id`),
+  KEY `FK_recept_pacijent` (`pacijent_id`),
+  KEY `FK_recept_lek` (`lek_id`),
+  CONSTRAINT `FK_recept_doktor` FOREIGN KEY (`doktor_id`) REFERENCES `doktor` (`doktor_id`),
+  CONSTRAINT `FK_recept_lek` FOREIGN KEY (`lek_id`) REFERENCES `lek` (`lek_id`),
+  CONSTRAINT `FK_recept_pacijent` FOREIGN KEY (`pacijent_id`) REFERENCES `pacijenti` (`pacijent_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `recept`
+--
+
+LOCK TABLES `recept` WRITE;
+/*!40000 ALTER TABLE `recept` DISABLE KEYS */;
+INSERT INTO `recept` VALUES (1,1,1,4,'2026-09-14 09:28:02',2),(2,2,2,1,'2026-09-14 09:28:02',1),(3,1,4,3,'2026-09-14 09:28:02',1),(4,2,2,5,'2026-09-14 10:11:10',1),(5,5,6,5,'2026-09-14 10:27:20',1),(6,6,8,3,'2026-09-14 10:27:20',2),(7,7,9,3,'2026-09-14 10:27:20',1),(8,1,4,10,'2026-09-16 09:01:45',1),(9,7,10,5,'2026-09-17 06:35:00',3);
+/*!40000 ALTER TABLE `recept` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2026-09-18 10:43:21
